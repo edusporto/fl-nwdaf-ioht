@@ -34,7 +34,7 @@ services:
     volumes:
       - ./certificates:/app/certificates
     networks:
-      privnet
+      - privnet
 
   client-0:
     container_name: fl-client-0
@@ -68,7 +68,7 @@ services:
       - COMM_FP16=1
       - DP_ENABLE=0
     networks:
-      privnet
+      - privnet
 
   client-1:
     container_name: fl-client-1
@@ -102,7 +102,7 @@ services:
       - COMM_FP16=1
       - DP_ENABLE=0
     networks:
-      privnet
+      - privnet
 
   training-manager:
     # This service runs an HTTP server that can trigger a training run.
@@ -141,7 +141,7 @@ services:
       - SERVER_DP_CLIP=1.0
       - SERVER_DP_NOISE=1.0
     networks:
-      - fl_network
+      - privnet
 
   driver:
     # The 'driver' service runs the server logic.
@@ -181,7 +181,7 @@ services:
       - SERVER_DP_CLIP=1.0
       - SERVER_DP_NOISE=1.0
     networks:
-      privnet
+      - privnet
 
   # ======================================================
   # Every service onwards is part of the `free5gc` project
