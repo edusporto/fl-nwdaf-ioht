@@ -114,18 +114,21 @@ services:
     command: uvicorn trigger_server:app --host 0.0.0.0 --port 9537
     depends_on:
       - superlink
+      - client-0
+      - client-1
     volumes:
       - ./fl_ioht/fl-wsl/artifacts:/app/artifacts
       - ./fl_ioht/fl-wsl/wustl-ehms-2020.csv:/app/wustl-ehms-2020.csv
       - ./fl_ioht/fl-wsl/ECU_IoHT.xlsx:/app/ECU_IoHT.xlsx
       - ./fl_ioht/fl-wsl/certificates:/app/certificates # For TLS
-      - .:/app # Mount the whole project to find trigger_server.py
+      - ./fl_ioht/fl-wsl/:/app # Mount the whole project to find trigger_server.py
     expose:
       - "9537"
     # ports:
     #   - "9537:9537"
     environment:
       # --- Task & Dataset Configuration ---
+      # Paths must be relative to the container's /app directory
       - TASK=ids
       - IOT_DATASET=wustl
       - WUSTL_PATH=/app/wustl-ehms-2020.csv
@@ -159,6 +162,8 @@ services:
     command: flwr run . docker-deployment --stream
     depends_on:
       - superlink
+      - client-0
+      - client-1
     volumes:
       - ./fl_ioht/fl-wsl/artifacts:/app/artifacts
       - ./fl_ioht/fl-wsl/wustl-ehms-2020.csv:/app/wustl-ehms-2020.csv
