@@ -32,7 +32,7 @@ services:
         --ssl-certfile certificates/server.pem
         --ssl-keyfile certificates/server.key
     volumes:
-      - ./certificates:/app/certificates
+      - ./fl_ioht/fl-wsl/certificates:/app/certificates
     networks:
       - privnet
 
@@ -49,9 +49,9 @@ services:
         --node-config "partition-id=0"
     volumes:
       # Mount certificates for TLS communication.
-      - ./certificates:/app/certificates
+      - ./fl_ioht/fl-wsl/certificates:/app/certificates
       # Mount data files
-      - ./wustl-ehms-2020.csv:/app/wustl-ehms-2020.csv
+      - ./fl_ioht/fl-wsl/wustl-ehms-2020.csv:/app/wustl-ehms-2020.csv
     depends_on:
       - superlink
     environment: &client-env
@@ -83,9 +83,9 @@ services:
         --node-config "partition-id=1"
     volumes:
       # Mount certificates for TLS communication
-      - ./certificates:/app/certificates
+      - ./fl_ioht/fl-wsl/certificates:/app/certificates
       # Mount data files
-      - ./wustl-ehms-2020.csv:/app/wustl-ehms-2020.csv
+      - ./fl_ioht/fl-wsl/wustl-ehms-2020.csv:/app/wustl-ehms-2020.csv
     depends_on:
       - superlink
     environment: &client-env
@@ -115,10 +115,10 @@ services:
     depends_on:
       - superlink
     volumes:
-      - ./artifacts:/app/artifacts
-      - ./wustl-ehms-2020.csv:/app/wustl-ehms-2020.csv
-      - ./ECU_IoHT.xlsx:/app/ECU_IoHT.xlsx
-      - ./certificates:/app/certificates # For TLS
+      - ./fl_ioht/fl-wsl/artifacts:/app/artifacts
+      - ./fl_ioht/fl-wsl/wustl-ehms-2020.csv:/app/wustl-ehms-2020.csv
+      - ./fl_ioht/fl-wsl/ECU_IoHT.xlsx:/app/ECU_IoHT.xlsx
+      - ./fl_ioht/fl-wsl/certificates:/app/certificates # For TLS
       - .:/app # Mount the whole project to find trigger_server.py
     expose:
       - "9537"
@@ -160,10 +160,10 @@ services:
     depends_on:
       - superlink
     volumes:
-      - ./artifacts:/app/artifacts
-      - ./wustl-ehms-2020.csv:/app/wustl-ehms-2020.csv
-      - ./ECU_IoHT.xlsx:/app/ECU_IoHT.xlsx
-      - ./certificates:/app/certificates # For TLS
+      - ./fl_ioht/fl-wsl/artifacts:/app/artifacts
+      - ./fl_ioht/fl-wsl/wustl-ehms-2020.csv:/app/wustl-ehms-2020.csv
+      - ./fl_ioht/fl-wsl/ECU_IoHT.xlsx:/app/ECU_IoHT.xlsx
+      - ./fl_ioht/fl-wsl/certificates:/app/certificates # For TLS
     environment:
       # --- Task & Dataset Configuration ---
       - TASK=ids
