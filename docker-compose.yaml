@@ -8,6 +8,8 @@ services:
     command: ./nwdaf
     expose:
       - "8000"
+    ports:
+      - "24242:24242"
     volumes:
       - ./config/nwdafcfg.yaml:/free5gc/config/nwdafcfg.yaml
       - ./cert:/free5gc/cert
