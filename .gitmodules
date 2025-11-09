@@ -1,0 +1,6 @@
+[submodule "nf_nwdaf/mnc_NWDAF"]
+	path = nf_nwdaf/mnc_NWDAF
+	url = https://github.com/edusporto/mnc_NWDAF
+[submodule "fl_ioht/fl-wsl"]
+	path = fl_ioht/fl-wsl
+	url = https://github.com/edusporto/fl-wsl
