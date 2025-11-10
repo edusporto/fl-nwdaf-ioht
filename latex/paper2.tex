@@ -1,0 +1,253 @@
+% \documentclass[12pt]{article}
+
+% \usepackage{sbc-template}
+
+% Final verison
+% \documentclass[lettersize,journal]{IEEEtran}
+
+% Version for Daniel:
+\documentclass[12pt,journal,onecolumn]{IEEEtran}
+
+\usepackage{amsmath,amsfonts}
+\usepackage{algorithmic}
+\usepackage{array}
+\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+\usepackage{textcomp}
+\usepackage{stfloats}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\usepackage{balance}
+
+\usepackage{graphicx,url}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel} % changed from `brazil`
+\usepackage{enumerate}
+\usepackage{setspace}
+\usepackage{subcaption}
+
+\sloppy
+
+\begin{document}
+
+\title{Integrating NWDAF and Federated Learning for Privacy-Preserving Intrusion Detection in B5G IoHT Networks}
+
+% Outras sugestões de títulos:
+% A Federated NWDAF Architecture for Anomaly Detection in IoHT Networks
+% Federated Learning for IoHT Anomaly Detection via the 5G NWDAF
+
+\author{E. K. Cruz Ortega, Eduardo S. Porto, Daniel M. Batista,\\\IEEEmembership{Department of Computer Science, University of São Paulo (USP)}, Brazil\\\{evgeni.cruz,sandalo,batista\}@ime.usp.br }
+
+
+% \address{Instituto de Matemática, Estatística, e Ciência da Computação -- \\Universidade de São Paulo
+%   (USP)
+  % \\Caixa Postal 15.064 -- 91.501-970 -- Porto Alegre -- RS -- Brazil
+% \nextinstitute
+%   Department of Computer Science -- University of Durham\\
+%   Durham, U.K.
+% \nextinstitute
+%   Departamento de Sistemas e Computação\\
+%   Universidade Regional de Blumenal (FURB) -- Blumenau, SC -- Brazil
+%   \email{\{evgeni.cruz,sandalo,batista\}@ime.usp.br}
+% }
+
+% Só ativar para enviar ao professor
+% \doublespacing
+
+\maketitle
+
+% For Daniel:
+\doublespacing
+
+\begin{abstract}
+  The combination of Federated Learning (FL) with the Network Data Analytics Function (NWDAF) opens up new possibilities for smart, secure, and privacy-friendly network analysis in Beyond 5G (B5G) settings. This paper introduces a framework that merges FL and NWDAF to support distributed intrusion detection in Internet of Healthcare Things (IoHT) networks. The proposed approach enhances network security by enabling various healthcare organizations to collaborate on training machine learning-based intrusion detection models without sharing sensitive patient information. For network simulation, we use the free5gc project and we use the Flower Python framework for federated learning orchestration.
+\end{abstract}
+     
+% \begin{resumo}
+%   TODO
+% \end{resumo}
+
+% A proposta deve conter uma seção de introdução com a motivação para o trabalho e os resultados esperados. Esta entrega também deve conter uma seção de trabalhos relacionados com no mínimo três referências, já resumidas e comparadas com o trabalho proposto deixando cláro qual e o avanço no estado da arte esperado.
+
+% Máximo de 14 páginas
+
+\section{Introduction} \label{sec:introduction}
+
+% - Motivação
+% - Resultados esperados
+
+The Internet of Health Things (IoHT), also referred to as the Internet of Medical Things (IoMT), connects medical devices, sensors, and healthcare systems to enable real-time analytics \cite{IoMT}. Smart hospitals are transforming healthcare into a data-driven environment, which is expected to continue growing globally over the next twenty years \cite{jovy-klein_forecasting_2024}. However, these systems face major challenges related to scalability, privacy, and security. Federated Learning (FL) helps address privacy and security issues by allowing machine learning models to be trained locally within edge devices, keeping sensitive data within healthcare institutions \cite{vinitha-2025}. It can also help tackle scalability, allowing training to be delegated to multiple distributed devices. All of this, however, has to be implemented within a network architecture. Beyond 5G (B5G) network architectures have performance, scalability, and adaptability as core principles, which are well-suited to an FL environment in IoHT.
+
+To support intelligent network operations, the 3rd Generation Partnership Project (3GPP) introduced the Network Data Analytics Function (NWDAF) to the 5G Core network functions in Release 15 \cite{guo-2025}. The NWDAF provides real-time network analytics that can work with learning algorithms to support automation and detect anomalies. Combining FL with NWDAF offers a promising approach to create intelligent and privacy-focused healthcare systems in B5G networks that learn and analyze data in a distributed manner.
+
+Specifically, the NWDAF can only subscribe to other network functions (NFs) and provide model inference to them. This means that its reach is only within the network level, and it never has direct access to user data. Thus, any prediction or analysis has to be done over network usage or information, making the NWDAF a great fit for privacy-sensitive situations. One such situation is intrusion detection, which can be done by analyzing network usage alone. Multiple NWDAFs can be deployed in the 5G Core, allowing each NF to have its own analysis mechanism. The data sets ECU-IoHT \cite{ECU-IoHT} and WUSTL-EHMS 2020 provide specific instances of intrusion data.
+
+% The Internet of Health Things (IoHT), also referred to as the Internet of Medical Things (IoMT), is a critical advancement on the digitalization of modern healthcare systems that has been gaining traction over the past few years. It connects smart medical devices, patient sensors, and hospital platforms through distributed high-availability networks, generating and collecting health data for further processing and analysis \cite{iomt}. The rise of smart hospitals marks a global shift toward data-driven, AI-enhanced healthcare ecosystems. Recent studies forecast that fully connected and intelligent hospitals will become a reality within the next two decades, transforming clinical operations and patient care \cite{jovy-klein_forecasting_2024}. However, the growing complexity of these distributed networks brings challenges regarding safety, privacy, anomaly detection, and scalability.
+
+% To tackle the former three issues, there has been an increasing effort to adopt techniques such as federated learning (FL). FL is particularly well-suited for IoHT networks, since it provides mitigation against data privacy breach of healthcare centers, keeping sensitive data locally within devices. Yet, FL does not solve issues with scalability alone, requiring tools that must also guarantee performance and adaptability --- which are both core principles of B5G and 6G network architectures.
+
+% Artificial Intelligence (AI) has become a cornerstone for next-generation mobile networks, enabling dynamic optimization of communication systems and data-driven decision-making. The 3rd Generation Partnership Project (3GPP) introduced the Network Data Analytics Function (NWDAF) in Release 15 to support data-driven network intelligence, followed by FL support in later releases to protect data privacy while enabling distributed learning \cite{guo-2025}. FL provides a decentralized paradigm in which multiple devices or nodes collaboratively train models without revealing sensitive data, making it especially suitable for IoHT/IoMT ecosystems where medical privacy is essential \cite{vinitha-2025}.
+
+% Specifically, these architectures include the Network Data Analytics Function (NWDAF), which is a native component to provide statistical and predictive analysis based on large volumes of network data.
+
+Despite recent advances, there is no published research integrating NWDAF, FL, and IoHT simultaneously, which would allow detection of intrusions in critical medical networks with low latency, preserving privacy and adaptability. This gap motivates our research, with the goal of producing a framework joining FL with NWDAF applied to IoHT, in particular for detecting cyberattack scenarios in real time. Integrating FL into 5G network architectures presents several challenges, including high communication overhead, model and data leakage, and interoperability between network analytics and machine learning modules \cite{guo-2025}. 
+
+% To address these limitations, this work builds upon recent advancements in hierarchical FL architectures \cite{islam-2025} and enhanced NWDAF implementations \cite{hernandez-2025}, proposing a unified framework that bridges both paradigms within simulated 5G networks using Free5GC and Flower. This study focuses on applying this hybrid configuration within IoHT/IoMT contexts to enhance anomaly detection, predictive analytics, and service optimization while maintaining strict data privacy.
+
+% Adapting existing FL solutions for IoHT cybersecurity to NWDAF, we aim to allow further scaling of these approaches.
+
+% \section{Research proposal} \label{sec:proposal}
+
+Considering these points, we propose the development of a hybrid framework consisting of NWDAF and FL to detect intrusions in IoHT networks. The main elements of our proposal include:
+
+\begin{itemize}
+    \item \textbf{Managed FL clients and servers}: local NWDAF instances distributed close to network functions in IoHT (e.g. hospital gateways, patient sensors) perform training, whose weights are then aggregated by a central, managing network function
+
+    \item \textbf{Intrusion detection mechanism}: deep learning models (CNN, LSTM, Autoencoders) trained locally via FL. They can be trained with data generated via NWDAF and perform prediction via this same system, identifying suspicious traffic or attacks in real time.
+
+    \item \textbf{Experimental validation}: we utilize the WUSTL-EHMS 2020 and ECU-IoHT \cite{ECU-IoHT} data sets, representative of attacks and realistic medical traffic. We expect to use the \textit{free5gc} open-source project as the simulation environment for our experiments. Both data sets and the simulation environment will be explained in more detail in Section~\ref{sec:experiments}.
+\end{itemize}
+
+Through our approach, our main research goals are to:
+
+\begin{enumerate}[i]
+    \item Achieve higher precision in intrusion detection than traditional centralized methods,
+
+    \item Reduce latency in responding to suspicious events in critical medical networks,
+
+    \item Preserve the privacy of clinical data, as sensitive information will not leave local devices,
+
+    \item Scale to complex IoHT scenarios with multiple connected devices,
+\end{enumerate}
+
+This paper is organized as follows.
+% In Section~\ref{sec:concepts}, we present a few basic concepts regarding 5G and the NWDAF.
+In Section~\ref{sec:related}, we review recent work connecting FL with NWDAF and FL with IoHT. In Section~\ref{sec:experiments}, we present our methodology and experiments, with our results in Section~\ref{sec:results}. Finally, in Section~\ref{sec:conclusion} we conclude our findings.
+
+% \section{Basic concepts} \label{sec:concepts}
+
+\section{Related Work} \label{sec:related}
+
+Our work has three main components: usage of NWDAF, an application of federated learning, and integration with IoHT networks. As we will present in this section, previous works have connected NWDAF with FL and FL with IoHT, but none have incorporated all three. Our approach innovates by bridging NWDAF and critical medical networks (IoHT), utilizing federated learning to ensure clinical data privacy and efficient intrusion detection, and validating with recent, realistic data sets to align our framework with practical scenarios.
+
+\subsection{Federated learning and NWDAF}
+
+Recent studies have shown notable progress in integrating NWDAF and FL technologies. \cite{guo-2025} proposed a Hierarchical Networking and Privacy-Preserving Federated Learning (HiNP-FL) framework to reduce communication overhead and protect model privacy in 5G networks. \cite{hernandez-2025} extended NWDAF capabilities beyond the core network, introducing additional analytics functions such as RAN-DAF and UE-DAF for comprehensive multi-layer analytics. \cite{FederatedInNWDAF} applied fair federated learning in multi-task NWDAF setups for 6G anomaly detection, achieving efficient model distribution and fairness across heterogeneous devices. However, none of these studies have open-source, reproducible experiments available.
+
+\cite{FederatedInNWDAF2} present a distributed NWDAF architecture for B5G exploring three strategies of machine learning: centralized machine learning, decentralized federated learning, and their own proposal of centralized federated learning with additional security mechanisms. The system is implemented in an environment with four NWDAF instances, each running on separate virtual machines, responsible for analyzing metrics such as CPU usage and network function (NF) performance. Its main innovation is the usage of Local Differential Privacy (LDP) and a feedback weighting mechanism to enhance robustness and mitigate security threats. Experimental results show that the proposed framework achieved approximately 97.7\% prediction accuracy and reduced inference latency from 21.4 s to around 4.8 s, outperforming both centralized ML (93.1\%) and decentralized FL ($\approx$ 95.8\%). While decentralized FL exhibited instability in model convergence among NWDAF instances, the centralized FL design maintained consistent performance and improved robustness. Nevertheless, this work focuses primarily on network load prediction rather than addressing medical or IoHT-specific cybersecurity scenarios.
+
+Another approach for distributed NWDAF with federated learning is divided into two levels: leaf NWDAFs and root NWDAFs \cite{jeon_distributed_2022}. The former are installed in local network functions, which train models with specific data (e.g. session duration), and the latter are localized in a central cloud, responsible for aggregating local models into a global model. The goal is to preserve data privacy and reduce resource usage, avoiding unnecessary uploads of sensitive information. The authors also illustrate examples of predicting user communication patterns combining different network functions: application functions (AFs), user plane functions (UPFs), session management functions (SMFs), and mobility management functions (AMFs). However, this paper is a conceptual proposal based on 3GPP standards, without practical implementations --- including implementations based on medical environments or validation on IoHT data sets.
+
+\subsection{Federated learning and IoHT}
+
+In the context of IoHT and IoMT, \cite{islam-2025} developed an Adaptive Federated Learning Framework (AFLF) incorporating hierarchical edge-fog-cloud architecture, differential privacy, and blockchain-based validation to enhance security and personalization. Similarly, \cite{amjath-2025} introduced a Differentially Private Federated Adversarial Learning (DP-FAT) model to mitigate poisoning and membership inference attacks in IoHT environments. Together, these works underscore the promise of combining FL with NWDAF to achieve scalable, secure, and privacy-preserving learning for healthcare and other mission-critical applications.
+
+The work in \cite{FederatedForIoHT2} provides a comprehensive survey on federated learning in healthcare, exploring clinical applications such as AI-assisted diagnostics, disease prediction, and the analysis of distributed medical images. The authors demonstrate how FL enables different health institutions to collaborate on model development without sharing sensitive data, thus preserving patient privacy. The study highlights key benefits like enhanced data security, inter-hospital collaboration, and diagnostic efficiency, while also discussing practical challenges such as data heterogeneity, large-scale communication problems, and the risks of adversarial attacks. However, while this work is directly relevant to the medical sector, it does not address the use of NWDAF or integration with 5G/6G infrastructures for traffic management and anomaly detection in IoHT environments. \cite{mosaiy} proposed an FL-based Intrusion Detection SYstem (DNN-FL) designed for IoHT environments. Their model achieved 91.4\% and 98.47\% accuracy on the WUSTL-EHMS 2020 and ECU-IoHT data sets, respectively. This demonstrates that decentralized learning can maintain high detection performance while keeping patient data private.
+
+\subsection{NWDAF}
+
+While direct applications of NWDAF to IoHT are absent from the literature, the capability to support massive IoT is a key motivation for the function's existence.
+
+To understand the core functionality of the NWDAF, it is useful to review its architectural evolution. The work in \cite{NWDAF} provides a detailed overview of the NWDAF's development, from early 3GPP drafts to Releases 16 and 17. The paper describes how the NWDAF collects data from multiple network functions, processes metrics, and generates both historical and predictive analytics. These analytics assist operators with tasks such as resource optimization, load balancing, predictive maintenance, and anomaly detection. Furthermore, the authors present real-world use cases and highlight new functions introduced in recent releases, including the Data Collection Coordination Function (DCCF) and the Analytics Data Repository Function (ADRF). While this provides a foundational understanding of the NWDAF's role, the paper does not explore its integration with federated learning or specific applications in IoHT, focusing instead on general 5G network analysis.
+
+\section{Methodology} \label{sec:experiments}
+
+Our methodology consists of two main parts: (1) an implementation of an NWDAF based on the work of \cite{oliveira_alise_2024}, fully integrated and containerized with the \textit{free5gc} simulator for the 5G Core architecture, and (2) the federated learning system orchestrated by the NWDAF. The code for the experiments is available at \textit{https://github.com/edusporto/fl-nwdaf-ioht}.
+
+\subsection{NWDAF}
+
+Based on the \textit{free5gc-compose} project, we adapted the NWDAF implementation developed by \cite{oliveira_alise_2024} and \cite{kim_implementation_2022} to a containerized environment with Docker Compose. The NWDAF container is responsible for registering itself as a NF and starting an HTTP server that can be used to communicate with it both from other NFs and, for experimental purposes, from outside the internal network. This HTTP server can be used to start FL training rounds and run inference.
+
+Four other services are added to this same Docker network: (i) a Flower \textit{SuperLink}, which connects FL clients, (ii, iii) two clients representing other internal NWDAFs (but not actually implemented as NFs) which run the training over the relevant data sets, and (iv) a training manager, which is an HTTP server that starts a Flower \textit{driver}. This driver is responsible for connecting to the SuperLink, requesting training rounds to start, and for aggregating the weights generated by each client. The central NWDAF HTTP server communicates with this FL HTTP server to decide when and how to initiate training or inference.
+
+\subsection{Federated Learning}
+
+The Flower framework version 1.22.0 was used to implement a distributed FL architecture for intrusion detection in Internet of Healthcare Things (IoHT) networks. The setup included a SuperLink which handled communication between all the elements. Two SuperNodes were responsible for subsets of client partitions, and a central ServerApp managed the training rounds and aggregated model parameters using the Federated Averaging strategy, FedAvg. Local training is performed on each client node using a model with either the ECU-IoHT or WUSTL-EHMS 2020 dataset, thereby enabling performance to be measured across heterogeneous sources of health data.
+
+To strengthen data privacy and communication security, we added Differential Privacy (DP) techniques on the server-side. We used a controlled Gaussian noise measure to determine the added noise during model aggregation for the purpose of privacy protection. Additionally, Transport Layer Security was deployed on all links to ensure that data exchange between the server, the SuperLink, and the clients was encrypted and authenticated. The global model checkpoints were stored in the \textit{npz} format, while the accuracy, loss, and F-1 score evaluation metrics were recorded after each communication round.
+
+% To evaluate the proposed integration between FL and the NWDAF in IoHT networks, a fully controlled experimental environment was developed using Flower, an open-source framework designed for federated learning research. The setup consists of three virtual nodes representing distributed healthcare entities. A central server (SuperLink) orchestrates the federated training process and applies differential privacy mechanisms. Two federated clients (SuperNodes) simulate independent medical institutions (e.g., hospitals or clinics) that train models locally on their own IoHT data. Communication between nodes was secured with Transport Layer Security (TLS), ensuring full data integrity, confidentiality, and trust among nodes.
+
+\subsection{Data sets}
+
+Two publicly available IoHT datasets were utilized in the experiments:
+
+\begin{enumerate}
+    \item \textbf{WUSTL-EHMS 2020}: A hospital monitoring dataset containing physiological metrics, sensor events, and medical annotations.
+    \item \textbf{ECU-IoHT Dataset}: A dataset simulating cyberattacks in IoHT environments, with labeled attack types such as Smurf Attack, DoS Attack, ARP Spoofing, and No Attack, used to train and evaluate intrusion detection models (IDS).
+\end{enumerate}
+
+Both datasets were preprocessed using custom scripts that performed normalization, client-based partitioning, and tensor conversion steps. Each client received a unique data partition, preserving non-IID characteristics inherent to federated environments.
+
+\subsection{Model architecture}
+
+Each client trained either a lightweight convolutional neural network (CNN) or a fully connected tabular model depending on the dataset’s characteristics. The architecture was optimized for IoT-scale devices, consisting of two convolutional layers and two dense layers, ReLU activations, batch normalization, and cross-entropy loss. The Adam optimizer was used with a learning rate of 0.001. On the server side, a Federated Averaging (FedAvg) aggregation strategy was employed, optionally extended with Differential Privacy (DP) mechanisms to introduce Gaussian noise during model aggregation and ensure client data anonymity.
+
+\section{Results} \label{sec:results}
+
+The FL setup operated for ten rounds of training to assess convergence, stability, and privacy. Using distributed updates with the help of the Flower framework, the global model is trained in a way that ensures raw data is never centralized. 
+
+Figure~\ref{fig:ecu-acc} shows the training accuracy across training rounds for the ECU-IoHT data set, fluctuating between 0.72 and 0.82 in the first iterations and stabilizing at approximately 0.75. The per-class recall is shown in Figure~\ref{fig:ecu-recall}. Most types of attacks achieved a high recall rate, and a relatively lower recall rate was observed among smaller classes. Finally, Figure~\ref{fig:ecu-dp} shows the privacy accounting results for the server-side DP mechanism. The final privacy budget was $\epsilon = 12.30$; thus, a good compromise between privacy and model accuracy was achieved with $q = 1.0, \,\sigma = 1.0, \, \delta = 10^{-5}$.
+
+\begin{figure}[h!]
+    \centering
+    
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{rounds-ecu.png}
+        \caption{Accuracy between training rounds for the ECU-IoHT data set.}
+        \label{fig:ecu-acc}
+    \end{minipage}
+    \hfill % This adds horizontal space between the images
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{recall-ecu.png}
+        \caption{Training recall for the ECU-IoHT data set.}
+        \label{fig:ecu-recall}
+    \end{minipage}
+    
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\linewidth]{ecu-privacy.png}
+    \caption{Differential Privacy metrics for the ECU-IoHT data set.}
+    \label{fig:ecu-dp}
+\end{figure}
+
+Similar metrics are available in Figures~\ref{fig:wustl-acc} and~\ref{fig:wustl-recall}. Training achieved a higher accuracy on this data set, reaching 0.93 by the fifth round. The model accurately identified the main class and achieved a recall of above 0.5 for the smaller class.
+
+\begin{figure}[h!]
+    \centering
+    
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{wustl-acc.png}
+        \caption{Accuracy between training rounds for the WUSTL data set.}
+        \label{fig:wustl-acc}
+    \end{minipage}
+    \hfill % This adds horizontal space between the figures
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{wustl-recall.png}
+        \caption{Training recall for the WUSTL data set.}
+        \label{fig:wustl-recall}
+    \end{minipage}
+    
+\end{figure}
+
+\section{Conclusion} \label{sec:conclusion}
+
+This work proposed a framework to integrate federated learning (FL) with the Network Data Analytics Function (NWDAF) from the 5G Core to detect intrusions in IoHT environments connected by B5G networks. We performed experiments with real IoHT data sets for FL, and integrated the management of FL clients and servers through a custom implementation of an NWDAF within the \textit{free5gc} simulator. We also validated our training metrics and incorporated Differential Privacy (DP) and TLS security in network communications to further improve data safety. The outcome is a secure and efficient framework capable of supporting distributed analytics without compromising data confidentiality. Possible future work includes (i) extending this integration with Explainable Artificial Intelligence (XAI) to improve model interpretability and trust, and (ii) the expansion of the simulated environment to include multiple registered NWDAFs and perform training with live-ingested data instead of pre-defined data sets.
+
+\section{Acknowledgements}
+
+The authors would like to thank the National Secretariat of Science, Technology, and Innovation of Panama (SENACYT) and the National Council for Scientific and Technological Development of Brazil (CNPq) for the financial support.
+
+\bibliographystyle{sbc}
+\bibliography{references}
+
+\end{document}
